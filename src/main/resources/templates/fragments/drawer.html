@@ -1,0 +1,59 @@
+<aside id="detail-drawer" th:unless="${plant == null}">
+    <section id="detail-drawer-header">
+        <h2 th:text="${plant.name}" class="heading"></h2>
+        <button th:aria-label="#{label.close}" class="btn btn-icon" onclick="closeDetailDrawer()">
+            <svg th:replace="~{fragments/closeIcon.html}"></svg>
+        </button>
+    </section>
+    <section id="detail-drawer-image-container">
+        <img th:src="${plant.image}" th:alt="${plant.name}">
+    </section>
+    <section id="detail-drawer-info-section">
+        <div>
+            <span th:text="#{label.lastWatered}" class="detail-drawer-info-label"></span>
+            <p th:if="${plant.lastWatered == null}" th:text="${#temporals.format(plant.lastWatered)}">28 März 2024</p>
+            <p th:unless="${plant.lastWatered != null}" th:text="#{label.notAvailable}"></p>
+        </div>
+        <div>
+            <span th:text="#{label.nextWateringDate}" class="detail-drawer-info-label"></span>
+            <p th:text="${#temporals.format(plant.nextWateringDate)}">28 März 2024</p>
+        </div>
+        <div>
+            <span th:text="#{label.location}" class="detail-drawer-info-label"></span>
+            <p th:text="${plant.location}"></p>
+        </div>
+        <div>
+            <span th:text="#{label.wateringInterval}" class="detail-drawer-info-label"></span>
+            <p>
+                [[#{label.every}]] [[${plant.wateringInterval.number}]] [[#{${plant.wateringInterval.asKey}}]]
+            </p>
+        </div>
+    </section>
+    <input type="hidden" name="plantId" th:value="${plant.id}" id="detail-drawer-plant-id">
+    <button class="btn btn-red"
+            th:attr="hx-delete=@{/{plantId}/delete(plantId=${plant.id})}"
+            data-hx-swap="none"
+            hx-on::after-request="onRequestEnd(event)"
+    >
+        <span class="btn-text" th:text="#{label.removePlant}"></span>
+        <span class="btn-loader"></span>
+    </button>
+    <button class="btn btn-blue"
+            th:attr="data-hx-post=@{/water}"
+            data-hx-target=".plant-list"
+            data-hx-swap="outerHTML"
+            data-hx-include="#detail-drawer-plant-id"
+            hx-on::after-request="onRequestEnd(event)"
+    >
+        <span class="btn-text" th:text="#{label.water}"></span>
+        <span class="btn-loader"></span>
+    </button>
+    <!--<button class="btn btn-green" th:text="#{label.edit}"></button>-->
+    <script>
+        function onRequestEnd(evt) {
+            if (evt.detail.successful === true) {
+                closeDetailDrawer()
+            }
+        }
+    </script>
+</aside>

@@ -1,0 +1,20 @@
+<li th:fragment="plantListeItem (plant)" th:attr="data-plant-list-id=${plant.id}">
+    <article
+            th:attr="hx-post=@{/detail},data-plant-list-id=${plant.id}"
+            data-hx-target="aside"
+            data-hx-swap="outerHTML"
+            data-hx-include="this"
+            data-hx-indicator="#loader"
+    >
+        <section style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="text-semibold" th:text="${plant.name}">Elefantenfuß</span>
+            <span th:if="${plant.wateringState == 'DRY'}" class="pill pill-small pill-warning"
+                  th:text="#{label.dry}">Dry</span>
+            <span th:if="${plant.wateringState == 'WATERED'}" class="pill pill-small pill-ok"
+                  th:text="#{label.watered}">Watered</span>
+        </section>
+        <p style="margin: 0; font-size: 0.9rem;" class="text-light" th:text="${plant.location}">Wohnzimmertisch</p>
+        <hr class="plant-list__divider">
+        <input type="hidden" name="plantId" th:value="${plant.id}">
+    </article>
+</li>

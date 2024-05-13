@@ -1,0 +1,5 @@
+<ul id="plant-list" class="plant-list">
+    <th:block th:each="plant : ${plants}">
+        <li th:replace="~{/fragments/plantListItem :: plantListeItem (${plant})}"></li>
+    </th:block>
+</ul>

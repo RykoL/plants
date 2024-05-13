@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html th:lang="${#locale.language}">
+<head>
+    <title>Plants</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" th:href="@{/index.css}">
+    <script src="https://unpkg.com/htmx.org@1.9.11"
+            integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="stub-header">
+    <nav class="header">
+        <h2 class="heading"><a class="plain-link" href="">Plants</a></h2>
+        <button
+                class="btn btn-green"
+                onclick="openDialog()"
+                th:text="#{label.newPlant}"
+                th:attr="data-hx-get=@{/newPlantForm}"
+                data-hx-target="#new-plant-form"
+                data-hx-swap="outerHTML"
+        ></button>
+    </nav>
+    <div class="header-inset"></div>
+</header>
+<main class="main-container">
+    <div class="plant-list-header">
+        <h2 class="heading plant-list-heading" th:text="#{label.heading}"></h2>
+    </div>
+    <ul class="plant-list" th:replace="~{fragments/plantTable}"></ul>
+</main>
+<aside></aside>
+<dialog class="modal">
+    <header>
+        <h2 class="heading heading-2" th:text="#{label.newPlant}"></h2>
+        <button th:aria-label="#{label.close}" class="btn btn-icon" onclick="closeDialog()">
+            <svg th:replace="~{fragments/closeIcon.html}"></svg>
+        </button>
+    </header>
+    <form id="new-plant-form"></form>
+</dialog>
+<div id="loader" class="htmx-indicator loader">
+    <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<script>
+    const dialog = document.querySelector('dialog')
+
+    function openDialog() {
+        dialog.showModal()
+    }
+
+    function closeDialog() {
+        dialog.close()
+    }
+
+    function closeDetailDrawer() {
+        const drawer = document.querySelector('aside')
+        drawer.id = 'detail-drawer-none'
+        drawer.innerHTML = ''
+    }
+</script>
+</body>
+</html>

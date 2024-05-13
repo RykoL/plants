@@ -1,0 +1,44 @@
+<form th:attr="hx-post=@{/}"
+      class="form" th:object="${newPlant}"
+      data-hx-encoding='multipart/form-data'
+      data-hx-indicator="#form-submit">
+    <label for="name" class="form-label">
+        [[#{label.name}]]
+        <input type="text" name="name" id="name" th:value="*{name}" required class="form-input"
+               placeholder="Beaucarnea recurvata"
+        />
+    </label>
+    <label for="image" class="form-label">
+        [[#{label.takeImage}]]
+        <input type="file" capture="environment" accept="image/*" name="image" id="image" required class="form-input">
+    </label>
+    <label for="location" class="form-label">
+        [[#{label.location}]]
+        <input type="text" name="location" id="location" required class="form-input" th:value="*{location}"
+               th:placeholder="#{label.placeHolderLocation}">
+        <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Incorrect date</p>
+    </label>
+    <label for="waterIntervalValue" class="form-label">
+        [[#{label.wateringInterval}]]
+        <div class="form-input-group">
+            <input type="number" name="wateringIntervalValue" id="waterIntervalValue" required class="form-input"
+                   th:value="*{wateringIntervalValue}">
+            <select name="wateringIntervalUnit" aria-label="Watering interval unit" required class="form-input"
+                    th:value="*{wateringIntervalUnit}">
+                <option value="days" th:text="#{label.days}">Days</option>
+                <option value="weeks" th:text="#{label.weeks}">Weeks</option>
+            </select>
+        </div>
+    </label>
+    <button type="submit" class="btn btn-green" id="form-submit" style="grid-column: 2" data-hx-disabled-elt="self">
+        <span class="btn-text" th:text="#{label.add}"></span>
+        <span class="btn-loader"></span>
+    </button>
+    <script>
+        function onSuccess(evt) {
+            if (evt.detail.success === true) {
+                closeDialog()
+            }
+        }
+    </script>
+</form>
